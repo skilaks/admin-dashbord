@@ -87,6 +87,7 @@ export default function RTL({ ...rest }) {
   }, [mainPanel]);
   return (
     <div className={classes.wrapper}>
+        
       <Sidebar
         routes={routes}
         logoText={"Skillas"}
@@ -98,13 +99,15 @@ export default function RTL({ ...rest }) {
         rtlActive
         {...rest}
       />
-      <div className={classes.mainPanel} ref={mainPanel}>
-        <Navbar
+      <Navbar
           routes={routes}
           handleDrawerToggle={handleDrawerToggle}
           rtlActive
           {...rest}
         />
+     
+      <div className={classes.mainPanel} ref={mainPanel}>
+       
         {/* On the /maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
         {getRoute() ? (
           <div className={classes.content}>

@@ -97,7 +97,7 @@ CustomInput.propTypes = {
   inputProps: PropTypes.object,
   value: PropTypes.string,
   formControlProps: PropTypes.object,
-  endAdornment : PropTypes.string,
+  endAdornment : PropTypes.object,
   error: PropTypes.bool,
   success: PropTypes.bool,
   onChange: PropTypes.func,

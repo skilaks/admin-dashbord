@@ -10,15 +10,19 @@ const styles = {
     margin: "0 -15px !important",
     width: "unset",
   },
+  justifyContentCenter:{
+    display: "flex",
+    justifyContent: "center"
+  }
 };
 
 const useStyles = makeStyles(styles);
 
 export default function GridContainer(props) {
   const classes = useStyles();
-  const { children, ...rest } = props;
+  const { children,justifyContentCenter, ...rest } = props;
   return (
-    <Grid container {...rest} className={classes.grid}>
+    <Grid container {...rest} className={classes.grid + "" + justifyContentCenter && classes.justifyContentCenter}>
       {children}
     </Grid>
   );
@@ -26,4 +30,5 @@ export default function GridContainer(props) {
 
 GridContainer.propTypes = {
   children: PropTypes.node,
+  justifyContentCenter : PropTypes.bool
 };

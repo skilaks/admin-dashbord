@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
+import AddIcon from "@material-ui/icons/Add";
+import ClearIcon from "@material-ui/icons/Clear";
+
 import { Divider } from 'antd'
 import PN from 'persian-number'
 // core components
@@ -9,9 +12,12 @@ import GridContainer from "components/Grid/GridContainer.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
 import Button from "components/CustomButtons/Button.js";
 import InputAdornment from '@material-ui/core/InputAdornment';
+import CustomFab from 'components/Fab/CustomFab.js';
+import CustomModal from 'components/Modal/CustomModal.js';
 
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
+import CardIcon from "components/Card/CardIcon.js";
 import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
@@ -21,6 +27,9 @@ import { lessonsDataSample } from '../../data/lessonDataSample'
 // import avatar from "assets/img/faces/marc.jpg";
 import styles from "assets/jss/material-dashboard-react/views/rtlStyle.js";
 import { TableTags } from "components/Tag/TableTags.js";
+import { IconButton } from "@material-ui/core";
+import { Schedule } from "@mui/icons-material";
+import AddSchedule from "./components/AddSchedule";
 
 const useStyles = makeStyles(styles);
 export default function UserProfile(prop) {
@@ -47,8 +56,9 @@ export default function UserProfile(prop) {
 
     const classes = useStyles();
     const [profileEditMode, setProfileEditeMode] = useState(true);
-    const [scheduleEditMode, setScheduleEditeMode] = useState(true);
+    const [scheduleEditMode, setScheduleEditeMode] = useState(false);
     const [financialEditMode, setFinancialEditeMode] = useState(true);
+    const [openModal, setOpenModal] = useState(false);
     const [code, setCode] = useState();
     const [lessonName, setLessonName] = useState();
     const [teacherName, setTeacherName] = useState();
@@ -68,7 +78,7 @@ export default function UserProfile(prop) {
     const [numberOfSessions, setNumberOfSessions] = useState();
     const [grade, setGrade] = useState();
     const [confirmation, setConfirmation] = useState();
-    const [alert, setAlert] = useState({show:false});
+    const [alert, setAlert] = useState({ show: false });
 
     const editProfileHandler = () => {
         setEditeMode(false);
@@ -100,7 +110,7 @@ export default function UserProfile(prop) {
         setProfileEditeMode(false);
     }
     const handleChangeShedule = () => {
-        setScheduleEditeMode(false);
+        setScheduleEditeMode(true);
     }
     const handleChangeFinancial = () => {
         setFinancialEditeMode(false);
@@ -114,11 +124,11 @@ export default function UserProfile(prop) {
         }
     }
     const handleSubmitSchedule = () => {
-        if (!scheduleEditMode) {
+        if (scheduleEditMode) {
             const updatedSchedulandStudent = { schedule, students }
             //send to service
             console.log(updatedSchedulandStudent)
-            setScheduleEditeMode(true)
+            setScheduleEditeMode(false)
         }
     }
     const handleSubmitFinancial = () => {
@@ -131,27 +141,45 @@ export default function UserProfile(prop) {
             setFinancialEditeMode(true)
         }
     }
-    const handlerconfirmation = (confrim)=>{
-        if(confrim){
+    const handlrAddSchedule= (sch)=>{
+        if (sch.day&&sch.time){
+        const schedules = schedule
+        schedules.push(sch);
+        setSchedule(schedules)
+    }
+    setOpenModal(false)
+    }
+    const handelDeleteSchedule = (value) => {
+        const schs = schedule
+        if (value !== -1) {
+            schs.splice(value, 1)
+            setSchedule(schs)
+
+
+        }
+
+    }
+    const handlerconfirmation = (confrim) => {
+        if (confrim) {
             //send to service true
             setConfirmation(!confirmation)
-            setAlert({show: true, message:'کلاس با موفقیت تایید شد',variant:'fill',severity:"success"})
+            setAlert({ show: true, message: 'کلاس با موفقیت تایید شد', variant: 'fill', severity: "success" })
         }
-           
-            
+
+
         else {
             //send to service false
             setConfirmation(!confirmation)
-            setAlert({show: true, message:'کلاس مورد تایید قرار نگرفت',variant:'fill',severity:"warning"})
+            setAlert({ show: true, message: 'کلاس مورد تایید قرار نگرفت', variant: 'fill', severity: "warning" })
 
-        
+
 
         }
     }
     return (
         (
             <div>
-            {/* {alert.show&&
+                {/* {alert.show&&
             <CustomAlert show={alert.show} message={alert.message} variant={alert.variant} severity={alert.sever}/>} */}
                 <GridContainer>
 
@@ -162,7 +190,7 @@ export default function UserProfile(prop) {
                             </CardBody>
                         </Card>
                     </GridItem>
-                   
+
                     {/******************************* Profile container **********************/}
                     <GridItem xs={12} sm={12} md={12}>
                         <Card>
@@ -323,16 +351,40 @@ export default function UserProfile(prop) {
                             </CardHeader>
                             <CardBody>
                                 <GridContainer>
-                                    <GridItem xs={12} sm={12} md={12}>
-
-
+                                    <GridItem xs={12} sm={12} md={12} justifyContentCenter>
                                         <TableTags
-                                            tags={schedule}
+                                            // tags={schedule}
                                             labelText='برنامه کلاسی'
-                                            closable={!scheduleEditMode}
+                                        // closable={!scheduleEditMode}
                                         />
-
+                                        {schedule && schedule.map((sch, key) => {
+                                            return (
+                                                <GridItem xs={12} sm={12} md={2} key={key}>
+                                                    <Card>
+                                                        <CardHeader className={classes.cardHeader} color="success">
+                                                            <h4 className={classes.cardTitlewite}>{sch.day}</h4>
+                                                            {scheduleEditMode && <IconButton aria-label="delete" size="small" onClick={() => handelDeleteSchedule(sch)} >
+                                                                <ClearIcon />
+                                                            </IconButton>}
+                                                        </CardHeader>
+                                                        <CardBody>
+                                                            <hr />
+                                                            <h5>   {PN.convertEnToPe(sch.time)}</h5>
+                                                        </CardBody>
+                                                    </Card>
+                                                </GridItem>
+                                            )
+                                        })}
                                     </GridItem>
+                                    
+                                        <CustomFab size="small" color="secondary" label="add" onClick={() => setOpenModal(true)}>
+                                            <AddIcon />
+                                        </CustomFab>
+                                        <CustomModal open={openModal} close={() => setOpenModal(false)}>
+                                            <AddSchedule schedule={(item) => handlrAddSchedule(item)}/>
+                                            
+                                        </CustomModal>
+                                    
                                     <Divider />
                                     <GridItem xs={12} sm={12} md={12}>
                                         <TableTags
@@ -480,8 +532,8 @@ export default function UserProfile(prop) {
                             </CardFooter>
                         </Card>
                     </GridItem>
-                     {/************************** confirmation container  *********************/}
-                  { !confirmation && <GridItem xs={12} sm={12} md={12}>
+                    {/************************** confirmation container  *********************/}
+                    {!confirmation && <GridItem xs={12} sm={12} md={12}>
                         <Card>
                             <CardHeader color="danger">
                                 <h4 className={classes.cardTitleWhite}>تاییدیه کلاس</h4>
@@ -513,14 +565,14 @@ export default function UserProfile(prop) {
                                     <Button
                                         className={classes.btn}
                                         color="info"
-                                     onClick={()=>handlerconfirmation(true)}
+                                        onClick={() => handlerconfirmation(true)}
                                     >
                                         بله
                                     </Button>
                                     <Button
                                         className={classes.btn}
                                         color="danger"
-                                     onClick={()=>handlerconfirmation(false)}
+                                        onClick={() => handlerconfirmation(false)}
                                     >
                                         خیر!!!
                                     </Button>
@@ -528,7 +580,7 @@ export default function UserProfile(prop) {
                             </CardFooter>
                         </Card>
                     </GridItem>
-}
+                    }
                 </GridContainer>
             </div>)
     );
