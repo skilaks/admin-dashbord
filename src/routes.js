@@ -24,6 +24,7 @@ import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import LocationOn from "@material-ui/icons/LocationOn";
 import Notifications from "@material-ui/icons/Notifications";
 import ClassIcon from "@material-ui/icons/Class";
+import PaymentIcon from '@mui/icons-material/Payment';
 import Language from "@material-ui/icons/Language";
 // core components/views for Admin layout
 // import DashboardPage from "views/Dashboard/Dashboard.js";
@@ -90,6 +91,16 @@ const dashboardRoutes = [
     name: "لیست دروس ",
     rtlName: "لیست دروس",
     icon: ClassIcon,
+    component: LessonList,
+    layout: '',
+    sidbarShow: true
+
+  },
+  {
+    path: "/financial",
+    name: "مالی",
+    rtlName: "مالی",
+    icon: PaymentIcon ,
     component: LessonList,
     layout: '',
     sidbarShow: true

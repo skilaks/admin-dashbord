@@ -2,6 +2,7 @@ import React from "react";
 import { withStyles } from '@material-ui/core/styles';
 import { Tag, Button } from "antd"
 import PN from "persian-number"
+import CustomChip from 'components/Chip/CustomChip.js'
 import {
     SyncOutlined,
     ClockCircleOutlined,
@@ -20,7 +21,7 @@ export default function Columns(lessons) {
             dataIndex: "code",
             key: "code",
             sorter: (a, b) => a.code - b.code,
-            render:(text)=>(
+            render: (text) => (
                 <h5>{PN.convertEnToPe(text)}</h5>
             )
         },
@@ -35,7 +36,7 @@ export default function Columns(lessons) {
             onFilter: (value, record) => record.name.indexOf(value) === 0,
             sorter: (a, b) => a.lessonName.length - b.lessonName.length,
             sortDirections: ['descend'],
-            render:(text)=>(
+            render: (text) => (
                 <>{PN.convertEnToPe(text)}</>
             )
         },
@@ -50,7 +51,7 @@ export default function Columns(lessons) {
             dataIndex: "capacity",
             key: "capacity",
             sorter: (a, b) => a.capacity - b.capacity,
-            render:(text)=>
+            render: (text) =>
                 (<>{PN.convertEnToPe(text)} نفر</>)
         },
         {
@@ -58,10 +59,10 @@ export default function Columns(lessons) {
             dataIndex: "price",
             key: "price",
             sorter: (a, b) => a.price - b.price,
-            render:(text)=>
-                
+            render: (text) =>
+
                 (< >{PN.convertEnToPe(PN.sliceNumber(text))}</>)
-            
+
         },
         {
             title: "وضعیت",
